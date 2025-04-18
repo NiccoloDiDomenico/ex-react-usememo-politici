@@ -4,6 +4,10 @@
     margin: 0 auto;
 }
 
+.list {
+    margin: 20px 0px;
+}
+
 .cards-grid {
     display: flex;
     flex-direction: row;
