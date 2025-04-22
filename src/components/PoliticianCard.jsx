@@ -1,4 +1,8 @@
+import { memo } from 'react'
+
 function PoliticianCard({ name, image, position, biography }) {
+    console.log("Render card:", name);
+
     return (
         <div className="card">
             <img src={image} alt={name} />
@@ -9,4 +13,4 @@ function PoliticianCard({ name, image, position, biography }) {
     )
 }
 
-export default PoliticianCard
+export default memo(PoliticianCard)
