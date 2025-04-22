@@ -12,6 +12,7 @@ function App() {
 
   const [politicians, setPoliticians] = useState([]);
   const [search, setSearch] = useState("");
+  const [selectedPosition, setSelectedPosition] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -25,14 +26,29 @@ function App() {
   }, [])
 
   const filteredPoliticians = useMemo(() => {
-    return politicians.filter((politician) => {
+    return politicians.filter((p) => {
       const searchLower = search.toLowerCase();
-      return (
-        politician.name.toLowerCase().includes(searchLower) ||
-        politician.biography.toLowerCase().includes(searchLower)
-      );
+
+      const matchesSearch =
+        p.name.toLowerCase().includes(searchLower) ||
+        p.biography.toLowerCase().includes(searchLower)
+
+      const matchesPosition =
+        selectedPosition === 'all' ||
+        selectedPosition === p.position
+
+      return matchesSearch && matchesPosition
     });
-  }, [politicians, search]);
+  }, [politicians, search, selectedPosition]);
+
+  const positions = useMemo(() => {
+    return politicians.reduce((acc, p) => {
+      if (!acc.includes(p.position)) {
+        acc.push(p.position)
+      }
+      return acc
+    }, []);
+  }, [politicians])
 
   return (
     <>
@@ -46,6 +62,19 @@ function App() {
           placeholder="Cerca..."
           onChange={(event) => setSearch(event.target.value)}
         />
+
+        {/* Selected bar */}
+        <select
+          value={selectedPosition}
+          onChange={(e) => setSelectedPosition(e.target.value)}
+        >
+          <option value="all">Tutte le posizioni</option>
+          {positions.map((position, index) => (
+            <option key={index} value={position}>
+              {position}
+            </option>
+          ))}
+        </select>
 
         {/* Politicians list */}
         <section className="list">
